@@ -1,6 +1,6 @@
 # Converting a Black Pill to a Black Magic Probe
 
-[![](pictures/black_debugging_blue_small.jpg  "STM32F411 debugging STM32F103")](https://github.com/koendv/blackmagic-blackpill/raw/master/pictures/black_debugging_blue.jpg)
+[![](pictures/black_debugging_blue_small.jpg  "STM32F411 debugging STM32F103")](https://raw.githubusercontent.com/koendv/blackmagic-blackpill/main/pictures/black_debugging_blue.jpg)
 
 This document shows how to convert a STM32F411 Black Pill to a Black Magic Probe gdb server. A Black Magic Probe (BMP) debugger allows you to download firmware over SWD or JTAG, to set breakpoints, and inspect variables.
 
@@ -21,7 +21,7 @@ Bus 001 Device 011: ID 0483:df11 STMicroelectronics STM Device in DFU Mode
 - flash using:
 
 ```
-dfu-util -a 0 --dfuse-address 0x08000000 -D blackmagic_blackpill.bin
+dfu-util -a 0 --dfuse-address 0x08000000 -D blackmagic.bin
 ```
 
 - push reset
