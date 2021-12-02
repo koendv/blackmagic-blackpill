@@ -86,6 +86,18 @@ No. Att Driver
 
 See the [overview of useful gdb commands](https://github.com/blacksphere/blackmagic/wiki/Useful-GDB-commands) for an  introduction to using the BMP. If you want more in-depth information, read the [Black Magic Probe Book](https://github.com/compuphase/Black-Magic-Probe-Book).
 
+## stm32duino
+
+If you are using the Arduino IDE with the [stm32duino](https://github.com/stm32duino/wiki/wiki/Getting-Started) arm processor add-on:
+
+In the Arduino IDE, choose *Tools->Upload Method-> BMP (Black Magic Probe)* to upload firmware using the BMP.  This uploads the firmware using the `arm-none-eabi-gdb` command. The command line options to  `arm-none-eabi-gdb` are in the *tools.bmp_upload* section of `~/.arduino15/packages/STMicroelectronics/hardware/stm32/2.0.0/platform.txt`
+
+When debugging arm processors, there are three ways for the target to print debug messages on the host: Semihosting, Serial Wire Output SWO, and Real-Time Transfer RTT. There are three Arduino libraries that may be useful:
+
+* [SerialWireOutput](https://github.com/koendv/SerialWireOutput)
+* [STM32duino-Semihosting](https://github.com/koendv/STM32duino-Semihosting)
+* [RTTStream](https://github.com/koendv/Arduino-RTTStream)
+
 _not truncated_
 
 
