@@ -67,7 +67,7 @@ stm32f411 |  stm32f103 |  |
 
 Your setup ought to look like the picture above.
 
-Careful - only connect one power source to a board. If in your setup Black Magic Probe and target are both connected to usb, the connection between Black Magic Probe and target should be  `SWDIO`, `SWCLK` and `GND` only. No `3V3` power.
+Careful - connect only one power source to a board. If in your setup Black Magic Probe and target are both connected to usb, the connection between Black Magic Probe and target should be  `SWDIO`, `SWCLK` and `GND` only. No `3V3` power.
 
 Connect the Black Magic Probe usb to the PC.  Now we are ready to connect to the target system:
 
@@ -99,5 +99,3 @@ When debugging arm processors, there are three ways for the target to print debu
 * [RTTStream](https://github.com/koendv/Arduino-RTTStream)
 
 _not truncated_
-
-
