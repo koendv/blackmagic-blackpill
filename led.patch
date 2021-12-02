@@ -1,3 +1,33 @@
+diff --git a/src/gdb_main.c b/src/gdb_main.c
+index c6f9550..690d346 100644
+--- a/src/gdb_main.c
++++ b/src/gdb_main.c
+@@ -104,7 +104,10 @@ int gdb_main_loop(struct target_controller *tc, bool in_syscall)
+ 	while(1) {
+ 		SET_IDLE_STATE(1);
+ 		size = gdb_getpacket(pbuf, BUF_SIZE);
+-		SET_IDLE_STATE(0);
++		// If port closed and target detached, stay idle
++		if (!(pbuf[0] == 0x04) || cur_target) {
++			SET_IDLE_STATE(0);
++		}
+ 		switch(pbuf[0]) {
+ 		/* Implementation of these is mandatory! */
+ 		case 'g': { /* 'g': Read general registers */
+@@ -272,10 +275,10 @@ int gdb_main_loop(struct target_controller *tc, bool in_syscall)
+ 			if(cur_target) {
+ 				SET_RUN_STATE(1);
+ 				target_detach(cur_target);
++				last_target = cur_target;
++				cur_target = NULL;
++				gdb_putpacketz("OK");
+ 			}
+-			last_target = cur_target;
+-			cur_target = NULL;
+-			gdb_putpacketz("OK");
+ 			break;
+ 
+ 		case 'k':	/* Kill the target */
 diff --git a/src/platforms/f4discovery/platform.h b/src/platforms/f4discovery/platform.h
 index dbec221..d034fbc 100644
 --- a/src/platforms/f4discovery/platform.h
@@ -14,3 +44,28 @@ index dbec221..d034fbc 100644
  
  #define USBUSART USART1
  #define USBUSART_CR1 USART1_CR1
+diff --git a/src/platforms/stlink/platform.h b/src/platforms/stlink/platform.h
+index f848ae7..27d3230 100644
+--- a/src/platforms/stlink/platform.h
++++ b/src/platforms/stlink/platform.h
+@@ -60,7 +60,7 @@ int usbuart_debug_write(const char *buf, size_t len);
+ #define SRST_PIN_V1	GPIO1
+ #define SRST_PIN_V2	GPIO0
+ 
+-#define LED_PORT	GPIOA
++#define LED_PORT	GPIOC
+ /* Use PC14 for a "dummy" uart led. So we can observere at least with scope*/
+ #define LED_PORT_UART	GPIOC
+ #define LED_UART	GPIO14
+@@ -138,9 +138,9 @@ int usbuart_debug_write(const char *buf, size_t len);
+ #define SWO_DMA_ISR(x)			dma1_channel5_isr(x)
+ 
+ extern uint16_t led_idle_run;
+-#define LED_IDLE_RUN            led_idle_run
++#define LED_IDLE_RUN            GPIO13
+ #define SET_RUN_STATE(state)	{running_status = (state);}
+-#define SET_IDLE_STATE(state)	{gpio_set_val(LED_PORT, led_idle_run, state);}
++#define SET_IDLE_STATE(state)	{gpio_set_val(LED_PORT, LED_IDLE_RUN, state);}
+ #define SET_ERROR_STATE(x)
+ 
+ extern uint32_t detect_rev(void);
