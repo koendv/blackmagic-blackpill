@@ -1,8 +1,20 @@
+commit db624a45eabf858cb9da9ad00ce7a2e214190d07
+Author: Koen De Vleeschauwer <kdv@kdvelectronics.eu>
+Date:   Mon Dec 27 09:58:55 2021 +0100
+
+    led patch
+
+    Blue pill:
+    make PROBE_HOST=stlink BLUEPILL=1
+
+    Black pill:
+    make PROBE_HOST=f4discovery BLACKPILL=1
+
 diff --git a/src/gdb_main.c b/src/gdb_main.c
-index c6f9550..641a365 100644
+index bdff229..2b1b1e6 100644
 --- a/src/gdb_main.c
 +++ b/src/gdb_main.c
-@@ -104,7 +104,10 @@ int gdb_main_loop(struct target_controller *tc, bool in_syscall)
+@@ -101,7 +101,10 @@ int gdb_main_loop(struct target_controller *tc, bool in_syscall)
  	while(1) {
  		SET_IDLE_STATE(1);
  		size = gdb_getpacket(pbuf, BUF_SIZE);
@@ -15,48 +27,61 @@ index c6f9550..641a365 100644
  		/* Implementation of these is mandatory! */
  		case 'g': { /* 'g': Read general registers */
 diff --git a/src/platforms/f4discovery/platform.h b/src/platforms/f4discovery/platform.h
-index dbec221..d034fbc 100644
+index 758507c..b0990e4 100644
 --- a/src/platforms/f4discovery/platform.h
 +++ b/src/platforms/f4discovery/platform.h
-@@ -76,9 +76,9 @@
+@@ -76,9 +76,15 @@
  #define LED_PORT GPIOC
  #define LED_PORT_UART GPIOA
  #define LED_UART GPIO1
--#define LED_IDLE_RUN GPIO15
++#ifdef BLACKPILL
 +#define LED_IDLE_RUN GPIO13
- #define LED_ERROR GPIO14
--#define LED_BOOTLOADER GPIO13
++#define LED_ERROR GPIO14
 +#define LED_BOOTLOADER GPIO15
++#else
+ #define LED_IDLE_RUN GPIO15
+ #define LED_ERROR GPIO14
+ #define LED_BOOTLOADER GPIO13
++#endif
  
  #define USBUSART USART1
  #define USBUSART_CR1 USART1_CR1
 diff --git a/src/platforms/stlink/platform.c b/src/platforms/stlink/platform.c
-index 93b0a3b..2d7c3f5 100644
+index 828b125..1a58adf 100644
 --- a/src/platforms/stlink/platform.c
 +++ b/src/platforms/stlink/platform.c
-@@ -54,10 +54,10 @@ void platform_init(void)
+@@ -86,6 +86,10 @@ void platform_init(void)
+ 	initialise_monitor_handles();
  #endif
  	rcc_clock_setup_pll(&rcc_hse_configs[RCC_CLOCK_HSE8_72MHZ]);
++#ifdef BLUEPILL
++	led_idle_run = GPIO13;
++	srst_pin = SRST_PIN_V1;
++#else
  	if (rev == 0) {
--		led_idle_run = GPIO8;
-+		led_idle_run = GPIO13;
+ 		led_idle_run = GPIO8;
  		srst_pin = SRST_PIN_V1;
- 	} else {
--		led_idle_run = GPIO9;
-+		led_idle_run = GPIO13;
+@@ -93,6 +97,7 @@ void platform_init(void)
+ 		led_idle_run = GPIO9;
  		srst_pin = SRST_PIN_V2;
  	}
++#endif
  	/* Setup GPIO ports */
+ 	gpio_set_mode(TMS_PORT, GPIO_MODE_OUTPUT_2_MHZ,
+ 	              GPIO_CNF_INPUT_FLOAT, TMS_PIN);
 diff --git a/src/platforms/stlink/platform.h b/src/platforms/stlink/platform.h
-index f848ae7..69f8804 100644
+index 0e79cdc..f2c345f 100644
 --- a/src/platforms/stlink/platform.h
 +++ b/src/platforms/stlink/platform.h
-@@ -60,7 +60,7 @@ int usbuart_debug_write(const char *buf, size_t len);
+@@ -60,7 +60,11 @@ int usbuart_debug_write(const char *buf, size_t len);
  #define SRST_PIN_V1	GPIO1
  #define SRST_PIN_V2	GPIO0
  
--#define LED_PORT	GPIOA
++#ifdef BLUEPILL
 +#define LED_PORT	GPIOC
++#else
+ #define LED_PORT	GPIOA
++#endif
  /* Use PC14 for a "dummy" uart led. So we can observere at least with scope*/
  #define LED_PORT_UART	GPIOC
  #define LED_UART	GPIO14
