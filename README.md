@@ -100,6 +100,6 @@ When debugging arm processors, there are three ways for the target to print debu
 
 ## risc-v
 
-The firmware _blackmagic-riscv.bin_ has added experimental support for selected risc-v processors. This is [work in progress](https://github.com/blackmagic-debug/blackmagic/pull/924).
+The firmware _riscv.zip_ has added experimental support for selected risc-v processors. This is [work in progress](https://github.com/blackmagic-debug/blackmagic/pull/924).
 
 _not truncated_
