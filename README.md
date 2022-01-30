@@ -2,7 +2,7 @@
 
 [![](pictures/black_debugging_blue_small.jpg  "STM32F411 debugging STM32F103")](https://raw.githubusercontent.com/koendv/blackmagic-blackpill/main/pictures/black_debugging_blue.jpg)
 
-This document shows how to convert a [STM32F411 Black Pill](https://www.aliexpress.com/item/1005001456186625.html) to a [Black Magic Probe](https://github.com/blacksphere/blackmagic) debugger. A Black Magic Probe (BMP) debugger allows you to download firmware over SWD or JTAG, to set breakpoints, and inspect variables. It is a cheap and convenient tool for debugging programs on arm processors.
+This document shows how to convert a [STM32F411 Black Pill](https://www.aliexpress.com/item/1005001456186625.html) to a [Black Magic Probe](https://github.com/blackmagic-debug/blackmagic) debugger. A Black Magic Probe (BMP) debugger allows you to download firmware over SWD or JTAG, to set breakpoints, and inspect variables. It is a cheap and convenient tool for debugging programs on arm processors.
 
 ## Installing Firmware
 Download and unzip the [firmware](https://github.com/koendv/blackmagic-blackpill/releases). Set up a STM32F411 Black Pill for dfu firmware upload:
@@ -34,14 +34,14 @@ Your debugger is now ready for use.
 
 ## Linux
 
-If you are running linux, download the [udev rules for the BMP](https://github.com/blacksphere/blackmagic/blob/master/driver/99-blackmagic.rules) and install them in 
- `/etc/udev/rules.d/99-blackmagic.rules`: 
- 
+If you are running linux, download the [udev rules for the BMP](https://github.com/blackmagic-debug/blackmagic/blob/master/driver/99-blackmagic.rules) and install them in
+ `/etc/udev/rules.d/99-blackmagic.rules`:
+
 ```
-$ wget https://github.com/blacksphere/blackmagic/raw/master/driver/99-blackmagic.rules
+$ wget https://github.com/blackmagic-debug/blackmagic/raw/master/driver/99-blackmagic.rules
 $ sudo cp 99-blackmagic.rules /etc/udev/rules.d/
-$ sudo chown root:root /etc/udev/rules.d/99-blackmagic.rules 
-$ sudo chmod 644 /etc/udev/rules.d/99-blackmagic.rules 
+$ sudo chown root:root /etc/udev/rules.d/99-blackmagic.rules
+$ sudo chmod 644 /etc/udev/rules.d/99-blackmagic.rules
 $ sudo udevadm control --reload-rules
 ```
 
@@ -84,7 +84,7 @@ No. Att Driver
 (gdb) run
 ```
 
-See the [overview of useful gdb commands](https://github.com/blacksphere/blackmagic/wiki/Useful-GDB-commands) for an  introduction to using the BMP. If you want more in-depth information, read the [Black Magic Probe Book](https://github.com/compuphase/Black-Magic-Probe-Book).
+See the [overview of useful gdb commands](https://github.com/blackmagic-debug/blackmagic/wiki/Useful-GDB-commands) for an  introduction to using the BMP. If you want more in-depth information, read the [Black Magic Probe Book](https://github.com/compuphase/Black-Magic-Probe-Book).
 
 ## stm32duino
 
@@ -97,5 +97,9 @@ When debugging arm processors, there are three ways for the target to print debu
 * [SerialWireOutput](https://github.com/koendv/SerialWireOutput)
 * [STM32duino-Semihosting](https://github.com/koendv/STM32duino-Semihosting)
 * [RTTStream](https://github.com/koendv/Arduino-RTTStream)
+
+## risc-v
+
+The firmware _blackmagic-riscv.bin_ has added experimental support for selected risc-v processors. This is [work in progress](https://github.com/blackmagic-debug/blackmagic/pull/924).
 
 _not truncated_
