@@ -21,7 +21,7 @@ Bus 001 Device 011: ID 0483:df11 STMicroelectronics STM Device in DFU Mode
 - flash using:
 
 ```
-dfu-util -a 0 --dfuse-address 0x08000000 -D blackmagic.bin
+sudo dfu-util -a 0 --dfuse-address 0x08000000 -D blackmagic.bin
 ```
 
 - push reset
