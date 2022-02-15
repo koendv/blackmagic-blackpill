@@ -1,0 +1,102 @@
+diff --git a/src/platforms/f4discovery/Makefile.inc b/src/platforms/f4discovery/Makefile.inc
+index ae6b75a..b112d10 100644
+--- a/src/platforms/f4discovery/Makefile.inc
++++ b/src/platforms/f4discovery/Makefile.inc
+@@ -8,7 +8,13 @@ CFLAGS += -Istm32/include -mcpu=cortex-m4 -mthumb \
+ 	-DSTM32F4 -I../libopencm3/include \
+ 	-Iplatforms/stm32
+ 
+-ifeq ($(BLACKPILL), 1)
++ifeq ($(BLACKPILL_F401CC), 1)
++LINKER_SCRIPT=platforms/stm32/blackpill_f401cc.ld
++CFLAGS += -DBLACKPILL=1
++else ifeq ($(BLACKPILL_F411CE), 1)
++LINKER_SCRIPT=platforms/stm32/blackpill_f411ce.ld
++CFLAGS += -DBLACKPILL=1
++else ifeq ($(BLACKPILL), 1)
+ LINKER_SCRIPT=platforms/stm32/blackpillv2.ld
+ CFLAGS += -DBLACKPILL=1
+ else
+diff --git a/src/platforms/stm32/blackpill_f401cc.ld b/src/platforms/stm32/blackpill_f401cc.ld
+index e69de29..9eba3a6 100644
+--- a/src/platforms/stm32/blackpill_f401cc.ld
++++ b/src/platforms/stm32/blackpill_f401cc.ld
+@@ -0,0 +1,30 @@
++/*
++ * This file is part of the libopenstm32 project.
++ *
++ * Copyright (C) 2010 Thomas Otto <tommi@viadmin.org>
++ *
++ * This program is free software: you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation, either version 3 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ */
++
++/* blackpill v1.2 with STM32F401CCU6 */
++
++/* Define memory regions. */
++MEMORY
++{
++	rom (rx) : ORIGIN = 0x08000000, LENGTH = 256K
++	ram (rwx) : ORIGIN = 0x20000000, LENGTH = 64K
++}
++
++/* Include the common ld script from libopenstm32. */
++INCLUDE cortex-m-generic.ld
+diff --git a/src/platforms/stm32/blackpill_f411ce.ld b/src/platforms/stm32/blackpill_f411ce.ld
+index e69de29..f61cc39 100644
+--- a/src/platforms/stm32/blackpill_f411ce.ld
++++ b/src/platforms/stm32/blackpill_f411ce.ld
+@@ -0,0 +1,30 @@
++/*
++ * This file is part of the libopenstm32 project.
++ *
++ * Copyright (C) 2010 Thomas Otto <tommi@viadmin.org>
++ *
++ * This program is free software: you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation, either version 3 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ */
++
++/* blackpill v1.3 and v3.1 with STM32F411CEU6 */
++
++/* Define memory regions. */
++MEMORY
++{
++	rom (rx) : ORIGIN = 0x08000000, LENGTH = 512K
++	ram (rwx) : ORIGIN = 0x20000000, LENGTH = 128K
++}
++
++/* Include the common ld script from libopenstm32. */
++INCLUDE cortex-m-generic.ld
+diff --git a/src/platforms/stm32/blackpillv2.ld b/src/platforms/stm32/blackpillv2.ld
+index 4dbc774..758801c 100644
+--- a/src/platforms/stm32/blackpillv2.ld
++++ b/src/platforms/stm32/blackpillv2.ld
+@@ -17,6 +17,8 @@
+  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  */
+ 
++/* blackpill with STM32F401CEU6 */
++
+ /* Define memory regions. */
+ MEMORY
+ {

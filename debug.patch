@@ -16,16 +16,3 @@ index dbec221..5d2f905 100644
  #define PLATFORM_HAS_TRACESWO
  #ifdef BLACKPILL
  #define PLATFORM_IDENT "(F4Discovery/BlackPillV2) "
-diff --git a/src/target/adiv5.c b/src/target/adiv5.c
-index 403ecc9..b3c01be 100644
---- a/src/target/adiv5.c
-+++ b/src/target/adiv5.c
-@@ -398,7 +398,7 @@ static uint32_t cortexm_initial_halt(ADIv5_AP_t *ap)
-  */
- static bool cortexm_prepare(ADIv5_AP_t *ap)
- {
--#if PC_HOSTED  == 1
-+#if (PC_HOSTED  == 1) || (ENABLE_DEBUG == 1)
- 	uint32_t start_time = platform_time_ms();
- #endif
- 	uint32_t dhcsr = cortexm_initial_halt(ap);
