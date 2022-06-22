@@ -2,7 +2,7 @@
 
 [![](pictures/black_debugging_blue_small.jpg  "STM32F411 debugging STM32F103")](https://raw.githubusercontent.com/koendv/blackmagic-blackpill/main/pictures/black_debugging_blue.jpg)
 
-This document shows how to convert a [STM32F411 Black Pill](https://www.aliexpress.com/item/1005001456186625.html) to a [Black Magic Probe](https://github.com/blackmagic-debug/blackmagic) debugger. A Black Magic Probe (BMP) debugger allows you to download firmware over SWD or JTAG, to set breakpoints, and inspect variables. It is a cheap and convenient tool for debugging programs on arm processors.
+This document shows how to convert a [STM32F411 Black Pill](https://www.aliexpress.com/af/STM32F401-STM32F411.html?SearchText=STM32F401+STM32F411) to a [Black Magic Probe](https://github.com/blackmagic-debug/blackmagic) debugger. A Black Magic Probe (BMP) debugger allows you to download firmware over SWD or JTAG, to set breakpoints, and inspect variables. It is a cheap and convenient tool for debugging programs on arm processors.
 
 ## Installing Firmware
 Download and unzip the [firmware](https://github.com/koendv/blackmagic-blackpill/releases). Set up a STM32F411 Black Pill for dfu firmware upload:
