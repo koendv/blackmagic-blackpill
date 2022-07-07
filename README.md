@@ -38,10 +38,10 @@ If you are running linux, download the [udev rules for the BMP](https://github.c
  `/etc/udev/rules.d/99-blackmagic.rules`:
 
 ```
-$ wget https://github.com/blackmagic-debug/blackmagic/raw/master/driver/99-blackmagic.rules
-$ sudo cp 99-blackmagic.rules /etc/udev/rules.d/
-$ sudo chown root:root /etc/udev/rules.d/99-blackmagic.rules
-$ sudo chmod 644 /etc/udev/rules.d/99-blackmagic.rules
+$ wget https://raw.githubusercontent.com/blackmagic-debug/blackmagic/main/driver/99-blackmagic-plugdev.rules
+$ sudo cp 99-blackmagic-plugdev.rules /etc/udev/rules.d/
+$ sudo chown root:root /etc/udev/rules.d/99-blackmagic-plugdev.rules
+$ sudo chmod 644 /etc/udev/rules.d/99-blackmagic-plugdev.rules
 $ sudo udevadm control --reload-rules
 ```
 
