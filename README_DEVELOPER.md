@@ -1,38 +1,36 @@
 This the build recipe for binaries for WeAct stm32f411 black pill:
 
 ```
+git clone https://github.com/koendv/blackmagic-blackpill
 git clone https://github.com/blackmagic-debug/blackmagic
-git clone https://github.com/koendv/blackmagic-blackpill
-wget -O rtt.patch https://github.com/blackmagic-debug/blackmagic/commit/c3c4ad99a6407024cae6de59a83c8a30fd9748e3.patch
 cd blackmagic
-patch -p1 < ../blackmagic-blackpill/led.patch
-patch -p1 < ../blackmagic-blackpill/srst.patch
-patch -p1 < ../rtt.patch
-make PROBE_HOST=f4discovery BLACKPILL=1 ENABLE_RTT=1
+patch -p1 <  ../blackmagic-blackpill/blackpill.patch
+```
+The patch
+
+- makes the LED blink if the probe is active
+- support for the NRST pin
+- support for stm32f401cc and stm32f411ce
+
+For WeAct stm32f411 black pill with 512k flash and 96k ram:
+```
+make clean
+make PROBE_HOST=blackpillv2 ENABLE_RTT=1
 ```
 
-If you wish to build firmware for a black pill with stm32f401cc, also apply patch _stm32f401.patch_:
-```
-git clone https://github.com/blackmagic-debug/blackmagic
-git clone https://github.com/koendv/blackmagic-blackpill
-wget -O rtt.patch https://github.com/blackmagic-debug/blackmagic/commit/c3c4ad99a6407024cae6de59a83c8a30fd9748e3.patch
-cd blackmagic
-patch -p1 < ../blackmagic-blackpill/led.patch
-patch -p1 < ../blackmagic-blackpill/srst.patch
-patch -p1 < ../rtt.patch
-patch -p1 < ../blackmagic-blackpill/stm32f401.patch
-make PROBE_HOST=f4discovery BLACKPILL_F401CC=1 ENABLE_RTT=1
-```
-
-For the firmware with added experimental risc-v support:
+For a black pill with stm32f401cc with 256k flash and 64k ram:
 
 ```
-git clone -b ruabmbua https://github.com/UweBonnes/blackmagic
-git clone https://github.com/koendv/blackmagic-blackpill
-wget -O rtt.patch https://github.com/blackmagic-debug/blackmagic/commit/c3c4ad99a6407024cae6de59a83c8a30fd9748e3.patch
-cd blackmagic
-patch -p1 < ../blackmagic-blackpill/led.patch
-patch -p1 < ../blackmagic-blackpill/srst.patch
-patch -p1 < ../rtt.patch
-make PROBE_HOST=f4discovery BLACKPILL=1 ENABLE_RTT=1
+make clean
+make PROBE_HOST=blackpillv2 BLACKPILL_F401CC=1 ENABLE_RTT=1
 ```
+
+For a black pill with stm32f411ce with 512k flash and 128k ram:
+
+```
+make clean
+make PROBE_HOST=blackpillv2 BLACKPILL_F411CE=1 ENABLE_RTT=1
+```
+
+These three only differ in the amount of ram and flash.
+

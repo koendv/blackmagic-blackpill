@@ -1,22 +1,82 @@
-diff --git a/src/platforms/f4discovery/Makefile.inc b/src/platforms/f4discovery/Makefile.inc
-index ae6b75a..b112d10 100644
---- a/src/platforms/f4discovery/Makefile.inc
-+++ b/src/platforms/f4discovery/Makefile.inc
+diff --git a/src/gdb_main.c b/src/gdb_main.c
+index 1f50f05..4167222 100644
+--- a/src/gdb_main.c
++++ b/src/gdb_main.c
+@@ -117,7 +117,10 @@ int gdb_main_loop(struct target_controller *tc, bool in_syscall)
+ 	while (1) {
+ 		SET_IDLE_STATE(1);
+ 		size_t size = gdb_getpacket(pbuf, BUF_SIZE);
+-		SET_IDLE_STATE(0);
++		// If port closed and target detached, stay idle
++		if (!(pbuf[0] == 0x04) || cur_target) {
++			SET_IDLE_STATE(0);
++		}
+ 		switch (pbuf[0]) {
+ 		/* Implementation of these is mandatory! */
+ 		case 'g': { /* 'g': Read general registers */
+diff --git a/src/platforms/blackpillv2/Makefile.inc b/src/platforms/blackpillv2/Makefile.inc
+index f0d2b8e..92db466 100644
+--- a/src/platforms/blackpillv2/Makefile.inc
++++ b/src/platforms/blackpillv2/Makefile.inc
 @@ -8,7 +8,13 @@ CFLAGS += -Istm32/include -mcpu=cortex-m4 -mthumb \
  	-DSTM32F4 -I../libopencm3/include \
  	-Iplatforms/stm32
  
--ifeq ($(BLACKPILL), 1)
 +ifeq ($(BLACKPILL_F401CC), 1)
 +LINKER_SCRIPT=platforms/stm32/blackpill_f401cc.ld
-+CFLAGS += -DBLACKPILL=1
 +else ifeq ($(BLACKPILL_F411CE), 1)
 +LINKER_SCRIPT=platforms/stm32/blackpill_f411ce.ld
-+CFLAGS += -DBLACKPILL=1
-+else ifeq ($(BLACKPILL), 1)
++else
  LINKER_SCRIPT=platforms/stm32/blackpillv2.ld
- CFLAGS += -DBLACKPILL=1
- else
++endif
+ 
+ LDFLAGS_BOOT = -lopencm3_stm32f4 \
+ 	-Wl,-T,$(LINKER_SCRIPT) -nostartfiles -lc -lnosys \
+diff --git a/src/platforms/blackpillv2/platform.c b/src/platforms/blackpillv2/platform.c
+index 207ad93..6493c22 100644
+--- a/src/platforms/blackpillv2/platform.c
++++ b/src/platforms/blackpillv2/platform.c
+@@ -115,8 +115,22 @@ void platform_init(void)
+ 	OTG_FS_GCCFG &= ~(OTG_GCCFG_VBUSBSEN | OTG_GCCFG_VBUSASEN);
+ }
+ 
+-void platform_nrst_set_val(bool assert) { (void)assert; }
+-bool platform_nrst_get_val(void) { return false; }
++void platform_nrst_set_val(bool assert)
++{
++	if (assert) {
++		gpio_mode_setup(NRST_PORT, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, NRST_PIN);
++		gpio_set_output_options(NRST_PORT, GPIO_OTYPE_OD, GPIO_OSPEED_2MHZ, NRST_PIN);
++		gpio_clear(NRST_PORT, NRST_PIN);
++	} else {
++		gpio_mode_setup(NRST_PORT, GPIO_MODE_INPUT, GPIO_PUPD_NONE, NRST_PIN);
++		gpio_set(NRST_PORT, NRST_PIN);
++	}
++}
++
++bool platform_nrst_get_val(void)
++{
++	return gpio_get(NRST_PORT, NRST_PIN) == 0;
++}
+ 
+ const char *platform_target_voltage(void)
+ {
+diff --git a/src/platforms/blackpillv2/platform.h b/src/platforms/blackpillv2/platform.h
+index 11dac32..92dd608 100644
+--- a/src/platforms/blackpillv2/platform.h
++++ b/src/platforms/blackpillv2/platform.h
+@@ -75,9 +75,9 @@
+ #define LED_PORT GPIOC
+ #define LED_PORT_UART GPIOA
+ #define LED_UART GPIO1
+-#define LED_IDLE_RUN GPIO15
++#define LED_IDLE_RUN GPIO13
+ #define LED_ERROR GPIO14
+-#define LED_BOOTLOADER GPIO13
++#define LED_BOOTLOADER GPIO15
+ 
+ #define USBUSART USART1
+ #define USBUSART_CR1 USART1_CR1
 diff --git a/src/platforms/stm32/blackpill_f401cc.ld b/src/platforms/stm32/blackpill_f401cc.ld
 index e69de29..9eba3a6 100644
 --- a/src/platforms/stm32/blackpill_f401cc.ld
