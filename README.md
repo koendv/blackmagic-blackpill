@@ -2,12 +2,12 @@
 
 [![](pictures/black_debugging_blue_small.jpg  "STM32F411 debugging STM32F103")](https://raw.githubusercontent.com/koendv/blackmagic-blackpill/main/pictures/black_debugging_blue.jpg)
 
-This document shows how to convert a [STM32F411 Black Pill](https://www.aliexpress.com/af/STM32F401-STM32F411.html?SearchText=STM32F401+STM32F411) to a [Black Magic Probe](https://github.com/blackmagic-debug/blackmagic) debugger. A Black Magic Probe (BMP) debugger allows you to download firmware over SWD or JTAG, to set breakpoints, and inspect variables. It is a cheap and convenient tool for debugging programs on arm processors.
+This document shows how to convert a [STM32F411 or STM32F401 Black Pill](https://www.aliexpress.com/af/STM32F401-STM32F411.html?SearchText=STM32F401+STM32F411) to a [Black Magic Probe](https://github.com/blackmagic-debug/blackmagic) debugger. A Black Magic Probe (BMP) debugger allows you to download firmware over SWD or JTAG, to set breakpoints, and inspect variables. It is a cheap and convenient tool for debugging programs on arm processors.
 
 ## Installing Firmware
-Download and unzip the [firmware](https://github.com/koendv/blackmagic-blackpill/releases). Set up a STM32F411 Black Pill for dfu firmware upload:
+Download and unzip the [firmware](https://github.com/koendv/blackmagic-blackpill/releases). Set up a STM32F4x1 Black Pill for dfu firmware upload:
 
-- connect the STM32F411 Black Pill to a usb port
+- connect the STM32F4x1 Black Pill to a usb port
 - push button BOOT0
 - push button NRST
 - release button NRST. wait one second.
@@ -34,7 +34,7 @@ Your debugger is now ready for use.
 
 ## Linux
 
-If you are running linux, download the [udev rules for the BMP](https://github.com/blackmagic-debug/blackmagic/blob/master/driver/99-blackmagic.rules) and install them in
+If you are running linux, download the [udev rules for the BMP](https://github.com/blackmagic-debug/blackmagic/blob/master/driver/99-blackmagic-plugdev.rules) and install them in
  `/etc/udev/rules.d/99-blackmagic.rules`:
 
 ```
@@ -97,9 +97,5 @@ When debugging arm processors, there are three ways for the target to print debu
 * [SerialWireOutput](https://github.com/koendv/SerialWireOutput)
 * [STM32duino-Semihosting](https://github.com/koendv/STM32duino-Semihosting)
 * [RTTStream](https://github.com/koendv/Arduino-RTTStream)
-
-## risc-v
-
-The firmware _riscv.zip_ has added experimental support for selected risc-v processors. This is [work in progress](https://github.com/blackmagic-debug/blackmagic/pull/924).
 
 _not truncated_
